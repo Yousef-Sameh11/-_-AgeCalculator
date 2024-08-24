@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator Code Alpha</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 12px 15px;
+            margin: 10px 0;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin-top: 20px;
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Age Calculator</h1>
+        <form id="ageCalculator">
+            <select id="day" required>
+                <option value="">Select Day</option>
+            </select><br>
+            <select id="month" required>
+                <option value="">Select Month</option>
+            </select><br>
+            <select id="year" required>
+                <option value="">Select Year</option>
+            </select><br>
+            <button type="button" onclick="calculateAge()">Calculate Age</button>
+        </form>
+        
+        <div id="result"></div>
+        <div class="error" id="error"></div>
+    </div>
+
+    <script>
+     
+        window.onload = function() {
+      
+            var daySelect = document.getElementById("day");
+            for (var i = 1; i <= 31; i++) {
+                var option = document.createElement("option");
+                option.value = i;
+                option.text = i;
+                daySelect.appendChild(option);
+            }
+
+          
+            var monthSelect = document.getElementById("month");
+            var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            for (var i = 0; i < months.length; i++) {
+                var option = document.createElement("option");
+                option.value = i + 1; 
+                option.text = months[i];
+                monthSelect.appendChild(option);
+            }
+
+          
+            var yearSelect = document.getElementById("year");
+            var currentYear = new Date().getFullYear();
+            for (var i = currentYear; i >= 1900; i--) {
+                var option = document.createElement("option");
+                option.value = i;
+                option.text = i;
+                yearSelect.appendChild(option);
+            }
+        };
+
+        function calculateAge() {
+            var day = parseInt(document.getElementById("day").value);
+            var month = parseInt(document.getElementById("month").value);
+            var year = parseInt(document.getElementById("year").value);
+
+            var today = new Date();
+            var birthDate = new Date(year, month - 1, day); 
+
+            var years = today.getFullYear() - birthDate.getFullYear();
+            var months = today.getMonth() - birthDate.getMonth();
+            var days = today.getDate() - birthDate.getDate();
+
+          
+            if (days < 0) {
+                months--;
+                days += new Date(today.getFullYear(), today.getMonth(), 0).getDate(); 
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            
+            document.getElementById("error").innerText = "";
+            document.getElementById("result").innerText = "";
+
+         
+            if (isNaN(years) || years < 0) {
+                document.getElementById("error").innerText = "Please select a valid date of birth.";
+            } else {
+                document.getElementById("result").innerText = `Your age is: ${years} years, ${months} months, and ${days} days.`;
+            }
+        }
+    </script>
+
+</body>
+</html>
